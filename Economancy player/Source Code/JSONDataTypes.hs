@@ -28,12 +28,17 @@ data JSONPhase = JSONPhase {
 data JSONShop = JSONShop {
     board_of_Monopoly :: Int,
     incantation :: Int,
+    wall_of_Wealth :: Int,
     worker :: Int,
     magic_Bean_Stock :: Int,
     bubble :: Int,
     ghost :: Int,
     senior_Worker :: Int,
-    gold_Fish :: Int
+    gold_Fish :: Int,
+    apprentice :: Int,
+    thug :: Int,
+    shield_of_Greed :: Int,
+    golem :: Int
 } deriving (Eq, Show, Generic)
 
 data JSONState = JSONState {
@@ -76,15 +81,15 @@ parseInput state = do
         Nothing -> error ""
         Just stt -> return stt
 
---{"day":1,"phase":{"name":"investing"},"player":0,"players":[{"buys":1,"cards":[{"name":"Sorcerer's Stipend","uses":0}],"coins":2},{"buys":1,"cards":[{"name":"Sorcerer's Stipend","uses":0}],"coins":2}],"shop":{"Board of Monopoly":4,"Bubble":2,"Ghost":4,"Gold Fish":2,"Incantation":6,"Magic Bean Stock":2,"Senior Worker":4,"Worker":4}}
+--{"day":1,"phase":{"name":"investing"},"player":0,"players":[{"buys":1,"cards":[{"name":"Sorcerer's Stipend","uses":0}],"coins":2},{"buys":1,"cards":[{"name":"Sorcerer's Stipend","uses":0}],"coins":2}],"shop":{"Board of Monopoly":4,"Bubble":2,"Ghost":4,"Gold Fish":2,"Incantation":6,"Magic Bean Stock":2,"Senior Worker":4,"Worker":4,"Wall of Wealth":1,"Apprentice":1,"Thug":1,"Golem":1,"Shield of Greed":1}}
 
---{"day":3,"phase":{"attacker":1,"attacker_card":false,"name":"attacking"},"player":1,"players":[{"buys":1,"cards":[{"name":"Sorcerer's Stipend","uses":0},{"name":"Magic Bean Stock","uses":0}],"coins":1},{"buys":1,"cards":[{"name":"Sorcerer's Stipend","uses":0},{"name":"Worker","uses":0}],"coins":1}],"shop":{"Board of Monopoly":4,"Bubble":2,"Ghost":4,"Gold Fish":2,"Incantation":6,"Magic Bean Stock":1,"Senior Worker":4,"Worker":3}}
+--{"day":3,"phase":{"attacker":1,"attacker_card":false,"name":"attacking"},"player":1,"players":[{"buys":1,"cards":[{"name":"Sorcerer's Stipend","uses":0},{"name":"Magic Bean Stock","uses":0}],"coins":1},{"buys":1,"cards":[{"name":"Sorcerer's Stipend","uses":0},{"name":"Worker","uses":0}],"coins":1}],"shop":{"Board of Monopoly":4,"Bubble":2,"Ghost":4,"Gold Fish":2,"Incantation":6,"Magic Bean Stock":1,"Senior Worker":4,"Worker":3,"Wall of Wealth":1,"Apprentice":1,"Thug":1,"Golem":1,"Shield of Greed":1}}
 
---{"day":3,"phase":{"attacker":1,"attacker_card":1,"name":"attacking"},"player":0,"players":[{"buys":1,"cards":[{"name":"Sorcerer's Stipend","uses":0},{"name":"Magic Bean Stock","uses":0}],"coins":1},{"buys":1,"cards":[{"name":"Sorcerer's Stipend","uses":0},{"name":"Worker","uses":1}],"coins":1}],"shop":{"Board of Monopoly":4,"Bubble":2,"Ghost":4,"Gold Fish":2,"Incantation":6,"Magic Bean Stock":1,"Senior Worker":4,"Worker":3}}
+--{"day":3,"phase":{"attacker":1,"attacker_card":1,"name":"attacking"},"player":0,"players":[{"buys":1,"cards":[{"name":"Sorcerer's Stipend","uses":0},{"name":"Magic Bean Stock","uses":0}],"coins":1},{"buys":1,"cards":[{"name":"Sorcerer's Stipend","uses":0},{"name":"Worker","uses":1}],"coins":1}],"shop":{"Board of Monopoly":4,"Bubble":2,"Ghost":4,"Gold Fish":2,"Incantation":6,"Magic Bean Stock":1,"Senior Worker":4,"Worker":3,"Wall of Wealth":1,"Apprentice":1,"Thug":1,"Golem":1,"Shield of Greed":1}}
 
---{"day":2,"phase":{"name":"buy"},"player":1,"players":[{"buys":1,"cards":[{"name":"Sorcerer's Stipend","uses":0}],"coins":1},{"buys":1,"cards":[{"name":"Sorcerer's Stipend","uses":0}],"coins":2}],"shop":{"Board of Monopoly":4,"Bubble":2,"Ghost":4,"Gold Fish":2,"Incantation":6,"Magic Bean Stock":2,"Senior Worker":4,"Worker":4}}
+--{"day":2,"phase":{"name":"buy"},"player":1,"players":[{"buys":1,"cards":[{"name":"Sorcerer's Stipend","uses":0}],"coins":1},{"buys":1,"cards":[{"name":"Sorcerer's Stipend","uses":0}],"coins":2}],"shop":{"Board of Monopoly":4,"Bubble":2,"Ghost":4,"Gold Fish":2,"Incantation":6,"Magic Bean Stock":2,"Senior Worker":4,"Worker":4,"Wall of Wealth":1,"Apprentice":1,"Thug":1,"Golem":1,"Shield of Greed":1}}
 
---{"day":3,"phase":{"name":"end","winner":0},"players":[{"buys":1,"cards":[{"name":"Sorcerer's Stipend","uses":0},{"name":"Magic Bean Stock","uses":1},{"name":"Senior Worker","uses":1},{"name":"Worker","uses":0},{"name":"Ghost","uses":1},{"name":"Ghost","uses":0},{"name":"Worker","uses":1},{"name":"Gold Fish","uses":0},{"name":"Ghost","uses":0},{"name":"Gold Fish","uses":0},{"name":"Senior Worker","uses":1}],"coins":8},{"buys":0,"cards":[],"coins":0}],"shop":{"Board of Monopoly":2,"Bubble":2,"Ghost":1,"Gold Fish":0,"Incantation":6,"Magic Bean Stock":0,"Senior Worker":0,"Worker":0}}
+--{"day":3,"phase":{"name":"end","winner":0},"players":[{"buys":1,"cards":[{"name":"Sorcerer's Stipend","uses":0},{"name":"Magic Bean Stock","uses":1},{"name":"Senior Worker","uses":1},{"name":"Worker","uses":0},{"name":"Ghost","uses":1},{"name":"Ghost","uses":0},{"name":"Worker","uses":1},{"name":"Gold Fish","uses":0},{"name":"Ghost","uses":0},{"name":"Gold Fish","uses":0},{"name":"Senior Worker","uses":1}],"coins":8},{"buys":0,"cards":[],"coins":0}],"shop":{"Board of Monopoly":2,"Bubble":2,"Ghost":1,"Gold Fish":0,"Incantation":6,"Magic Bean Stock":0,"Senior Worker":0,"Worker":0,"Wall of Wealth":1,"Apprentice":1,"Thug":1,"Golem":1,"Shield of Greed":1}}
 
 -- main :: IO ()
 -- main = do

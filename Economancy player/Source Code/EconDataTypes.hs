@@ -4,8 +4,10 @@ import JSONDataTypes
 import qualified Data.Aeson as JSON
 import Data.Scientific (toBoundedInteger)
 import Data.Map (Map, fromList)
+import Data.Maybe
+import RIO.Time (DayOfWeek(Thursday))
 
-data CardType = SOR | MON | INC | WOR | MAG | BUB | GHO | SEN | FIS     -- MON = Board of Monopoly, FIS = Gold Fish
+data CardType = SOR | MON | INC | WAL | WOR | MAG | BUB | GHO | SEN | FIS | APP | THU | SHI | GOL   -- MON = Board of Monopoly, FIS = Gold Fish, GOL = Golem
     deriving (Eq, Ord)
 
 getCardType :: String -> CardType
@@ -13,24 +15,34 @@ getCardType s =
     case s of "Sorcerer's Stipend" -> SOR
               "Board of Monopoly"  -> MON
               "Incantation"        -> INC
+              "Wall of Wealth"     -> WAL
               "Worker"             -> WOR
               "Magic Bean Stock"   -> MAG
               "Bubble"             -> BUB
               "Ghost"              -> GHO
               "Senior Worker"      -> SEN
               "Gold Fish"          -> FIS
+              "Apprentice"         -> APP
+              "Thug"               -> THU
+              "Shield of Greed"    -> SHI
+              "Golem"              -> GOL
 
 produceCardName :: CardType -> String
 produceCardName s =
     case s of SOR -> "Sorcerer's Stipend"
               MON -> "Board of Monopoly"
               INC -> "Incantation"
+              WAL -> "Wall of Wealth"
               WOR -> "Worker"
               MAG -> "Magic Bean Stock"
               BUB -> "Bubble"
               GHO -> "Ghost"
               SEN -> "Senior Worker"
               FIS -> "Gold Fish"
+              APP -> "Apprentice"
+              THU -> "Thug"
+              SHI -> "Shield of Greed"
+              GOL -> "Golem"
 
 data Card = Card {
     name :: CardType,
@@ -82,12 +94,17 @@ type Shop = Map CardType Int
 getShop :: JSONShop -> Shop
 getShop jshop = fromList [(MON, board_of_Monopoly jshop),
                           (INC, incantation jshop),
+                          (WAL, wall_of_Wealth jshop),
                           (WOR, worker jshop),
                           (MAG, magic_Bean_Stock jshop),
                           (BUB, bubble jshop),
                           (GHO, ghost jshop),
                           (SEN, senior_Worker jshop),
-                          (FIS, gold_Fish jshop)]
+                          (FIS, gold_Fish jshop),
+                          (APP, apprentice jshop),
+                          (THU, thug jshop),
+                          (SHI, shield_of_Greed jshop),
+                          (GOL, golem jshop)]
 
 data State = State {
     day :: Int,
@@ -106,41 +123,17 @@ getState jstate =
         player = sttplayer jstate
     in State {day, phase, shop, players, player}
 
-maxUses :: Card -> Int
-maxUses _ = 1
+-- calling the following functions on a state with end phase will result in runtime error because 'player' is Nothing
 
-isUsable :: Card -> Bool
-isUsable c = uses c < maxUses c
+getMe :: State -> Player
+getMe stt = players stt !! fromJust (player stt)
 
-canAttack :: Card -> Bool
-canAttack c = name c /= BUB
+getOthers :: State -> [Player]
+getOthers stt = let (before, after) = splitAt (fromJust (player stt)) (players stt)
+                 in (before ++ drop 1 after)
 
-cost :: CardType -> Int
-cost ct =
-    case ct of SOR -> 0
-               MON -> 2
-               INC -> 4
-               WOR -> 1
-               MAG -> 1
-               BUB -> 2
-               GHO -> 2
-               SEN -> 2
-               FIS -> 3
+--othersCoins :: State -> [Int]
+--othersCoins stt = Prelude.map coins (others stt)
 
--- getCardInfo :: CardType -> CardInfo
--- getCardInfo c =
---     case c of SOR -> CardInfo 0 [2,1,1] 0 0 0
---               MON -> CardInfo 2 [0,0,0] 1 1 1
---               INC -> CardInfo 4 [0,0,0] 3 1 1
---               WOR -> CardInfo 1 [0,1,1] 0 1 2
-            --   etc, etc, etc
-
--- data CardInfo = CardInfo {
---     cost :: Int,
---     rewards :: [Int],
---     vic :: Int,
---     attack :: Int,
---     shield :: Int
--- }
-
---twoCoinRewardFunction
+--othersCards :: State -> [Card]
+--othersCards stt = concatMap cards (others stt)
