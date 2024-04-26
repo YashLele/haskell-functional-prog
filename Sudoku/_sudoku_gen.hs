@@ -73,12 +73,12 @@ randomize lst = do
 boardify :: IO [a] -> Int -> Int -> IO [[a]]
 boardify ionums m n = do
       nums <- ionums
-      return (take (m*n) nums : boardify (drop (m*n) nums) m n)
+      (take (m*n) nums) : boardify (drop (m*n) ionums) m n
 
 main :: IO ()
 main = do
   putStrLn "not randomized"
-  let nums = [1..10]
+  let nums = [1..9]
   print nums
   putStrLn "randomized"
-  print =<< randomize nums
+  print =<< boardify (concatMap (\_ -> do rn <- randomize nums; return rn) [1 .. m*n]) m n 
